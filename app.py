@@ -1,8 +1,8 @@
 """Flask app for Cupcakes"""
 import os
 
-from flask import Flask, render_template, flash, redirect, jsonify, request
-from models import connect_db, db, Cupcake
+from flask import Flask, render_template, jsonify, request
+from models import connect_db, db, Cupcake, DEFAULT_IMAGE_URL
 
 app = Flask(__name__)
 
@@ -15,6 +15,10 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 
 connect_db(app)
+
+@app.get('/')
+def show_homepage():
+    return render_template('index.html')
 
 
 @app.get('/api/cupcakes')
@@ -33,7 +37,7 @@ def show_cupcakes():
 def show_cupcake(cupcake_id):
     """Returns information about a single cupcake
 
-    Returns JSON {'cupcakes': {id, flavor, size, rating, image_url}}"""
+    Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}"""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
     serialized = cupcake.serialize()
@@ -45,13 +49,13 @@ def show_cupcake(cupcake_id):
 def create_cupcake():
     """Create cupcake from posted JSON data & return it
 
-    Returns JSON {'cupcakes': {id, flavor, size, rating, image_url}}"""
+    Returns JSON {'cupcake': {id, flavor, size, rating, image_url}}"""
 
     cupcake = Cupcake(
         flavor=request.json["flavor"],
         size=request.json["size"],
         rating=request.json["rating"],
-        image_url=request.json.get("image_url"),
+        image_url=request.json.get("image_url") or None,
     )
 
     db.session.add(cupcake)
@@ -73,8 +77,10 @@ def update_cupcake(cupcake_id):
     cupcake.flavor = request.json.get("flavor", cupcake.flavor)
     cupcake.size = request.json.get("size", cupcake.size)
     cupcake.rating = request.json.get("rating", cupcake.rating)
-    #  TODO: add validation to check image URL using if statement
-    cupcake.image_url = request.json.get("image_url", cupcake.image_url)
+    if request.json.get("image_url"):
+        cupcake.image_url = request.json.get("image_url", cupcake.image_url)
+    else:
+        cupcake.image_url = DEFAULT_IMAGE_URL
 
     db.session.commit()
 
@@ -86,7 +92,7 @@ def update_cupcake(cupcake_id):
 @app.delete('/api/cupcakes/<int:cupcake_id>')
 def delete_cupcake(cupcake_id):
     """ Delete cupcake passed in from URL parameter
-    
+
      Returns  { "deleted": [cupcake_id] }"""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupcakes</title>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@5/dist/css/bootstrap.css">
+</head>
+
+<body class="ms-2 mb-2">
+
+  <h1>Cupcakes</h1>
+
+  <ul id="cupcake-list">
+  </ul>
+
+  <h3>Add new cupcake:</h3>
+  <form id="cupcake-form">
+    <label for="flavor" class="col-2 mb-3">Flavor:</label>
+    <input type="text" id="flavor"><br>
+
+    <label for="size" class="col-2 mb-3">Size:</label>
+    <select id="size">
+      <option value="extra large">Extra Large</option>
+      <option value="large">Large</option>
+      <option value="medium">Medium</option>
+      <option value="small">Small</option>
+    </select><br>
+
+    <label for="rating" class="col-2 mb-3">Rating:</label>
+    <select id="rating">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select> <br>
+
+    <label for="image-url" class="col-2 mb-3">Image URL:</label>
+    <input type="text" id="image-url"> <br>
+
+    <button type="submit" class="btn btn-primary">Add Cupcake</button>
+  </form>
+
+</body>
+
+<script src="http://unpkg.com/jquery"></script>
+<script src="/static/cupcakes.js"></script>
+
+</html>
